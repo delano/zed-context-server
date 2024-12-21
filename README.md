@@ -1,34 +1,53 @@
-# Zed Context Server
+# Zed Git Context Server
 
-This extension provides a connection to a Model Context Server for Libsql, for
-use with the Zed AI assistant. It will add prompts from the connected server as
-slash commands to the Assistant Panel.
+This extension provides a connection to a Git Model Context Server for Zed's AI assistant. It enables the assistant to understand and interact with Git repositories, providing contextual information about version control.
 
-> **Note:** This extension does not install a libsql model context server. You
-> will need to provide your own. Here is a link to one:
-> [Mcp Server LibSQL](https://github.com/nicholasq/mcp-server-libsql)
+## Features
 
-This extension assumes you are using a Model Context Server in
-[stdio transport](https://modelcontextprotocol.io/docs/concepts/transports#standard-input-output-stdio).
-It also assumes that the Model Context Server receives these arguments:
-`<libsql-url> --auth-token <your-libsql-db-token>` (--auth-token is optional if
-database is local)
+The Git context server provides information about:
+- Repository status
+- Commit history
+- File changes
+- Branch information
+- And more through the MCP server
+
+## Installation
+
+1. Install the extension in Zed
+2. Ensure you have Node.js installed (for uvx package manager)
+3. Install the Git MCP server:
+   ```bash
+   npm install -g @modelcontextprotocol/server-git
+   ```
 
 ## Configuration
 
-Your Zed `settings.json`:
+Add to your Zed `settings.json` (located at `~/.config/zed/settings.json`):
 
 ```json
 {
   "context_servers": {
     "zed-context-server": {
       "settings": {
-        "command": "uvx",
-        "args": [
-          "mcp-server-git",
-          "--repository",
-          "/Users/d/Projects/opensource/onetime/onetimesecret"
-        ]
+        "repository": "/absolute/path/to/your/git/repository"
+      }
+    }
+  }
+}
+```
+
+> **Important:** The repository path must:
+> 1. Be an absolute path (e.g., `/Users/username/projects/repo`)
+> 2. Point to an existing Git repository (containing a `.git` directory)
+> 3. Have proper read permissions
+
+For example:
+```json
+{
+  "context_servers": {
+    "zed-context-server": {
+      "settings": {
+        "repository": "/Users/d/Projects/opensource/zed-context-server"
       }
     }
   }
@@ -37,13 +56,24 @@ Your Zed `settings.json`:
 
 ## Usage
 
-Assuming you have
-[Mcp Server LibSQL](https://github.com/nicholasq/mcp-server-libsql) connected to
-this extension:
+The Git context server provides several capabilities through Zed's AI assistant:
 
-- `/libsql-schema <table-name>`: Retrieve the schema for the table with the
-  given name.
-- `/libsql-schema all-tables`: Retrieve the schemas for all tables in the
-  database.
-- `/libsql-query <table-name>`: Retrieve all rows from the table with the given
-  name(actually it only pulls max 500 rows for now).
+- Get repository status
+- View commit history
+- Check file changes
+- Examine branch information
+
+The assistant will automatically use this context when answering questions about your Git repository.
+
+## Development
+
+This extension is built using:
+- Rust with zed_extension_api
+- Model Context Protocol (MCP)
+- mcp-server-git for Git integration
+
+## Troubleshooting
+
+1. Ensure the repository path exists and is a valid Git repository
+2. Check that mcp-server-git is installed globally
+3. Verify the repository path in settings.json is correct

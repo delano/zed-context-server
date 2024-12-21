@@ -1,14 +1,15 @@
 id = "zed-context-server"
-name = "Zed Context Server"
+name = "Zed Git Context Server"
 version = "0.1.1"
 schema_version = 1
-authors = ["Your Name <your.email@example.com>"]
-description = "A context server extension for Zed"
-repository = "https://github.com/yourusername/zed-context-server"
+authors = ["Saoud Rizwan"]
+description = "Git context server extension for Zed's AI assistant"
+repository = "https://github.com/saoudrizwan/zed-context-server"
 
 [commands.git_info]
 title = "Git Info"
 description = "Get information about the current git repository"
 
 [context_servers.zed-context-server]
-name = "A Zed Context Server"
+name = "Git Context Server"
+description = "Provides Git repository context through MCP"
